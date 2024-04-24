@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Blog Post</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Add Blog Post</h2>
+    <form id="blogPostForm" action="/admin/blog-post" method="POST">
+      <input type="text" name="id" value="<%= id ? id : '' %>" hidden>
+      <div class="form-group">
+        <label for="contentTitle">Content Title</label>
+        <input type="text" id="contentTitle" name="content_title" value="<%= singlePost ? singlePost.content_title : '' %>" required>
+      </div>
+      <div class="form-group">
+        <label for="contentImage">Content Image URL</label>
+        <input type="text" id="contentImage" name="content_image" value="<%= singlePost ? singlePost.content_image : '' %>" required>
+      </div>
+      <div class="form-group">
+        <label for="editor">Content</label>
+        <textarea id="editor" name="content" rows="4"><%= singlePost ? singlePost.content : '' %></textarea>
+      </div>
+
+
+
+      <div class="form-group">
+        <label for="readTime">Read Time</label>
+        <input type="text" id="readTime" name="read_time" value="<%= singlePost ? singlePost.read_time : '' %>" required>
+      </div>
+      <div class="form-group">
+        <label for="categories">Categories</label>
+        <select id="categories" name="categories" required>
+          <option value="Technology" <%= singlePost && singlePost.categories === 'Technology' ? 'selected' : '' %>>Technology</option>
+          <option value="Travel" <%= singlePost && singlePost.categories === 'Travel' ? 'selected' : '' %>>Travel</option>
+          <option value="Lifestyle" <%= singlePost && singlePost.categories === 'Lifestyle' ? 'selected' : '' %>>Lifestyle</option>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="tags">Tags/Keywords</label>
+        <input type="text" id="tags" name="tags" value="<%= singlePost ? singlePost.tags : '' %>" required>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  
+  <div class="blog-container">
+    <% posts.forEach(post => { %>
+    <div class="blog-card">
+        <img src="<%= post.content_image %>" alt="Blog Image" class="blog-image">
+        <div class="blog-content">
+            <h5 class="blog-title"><%= post.content_title %></h5>
+            <span><a href="?id=<%= post._id %>" class="read-more">Edit</a> <a class="delete" href="/delete/blog/<%= post._id %>">Delete</a></span>
+        </div>
+    </div>
+    <% }) %>
+</div>
+
+<script>
+  ClassicEditor
+      .create( document.querySelector( '#editor' ) )
+      .catch( error => {
+          console.error( error );
+      } );
+</script>
+<style>
+  .blog-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+  }
+
+  .blog-card {
+      width: calc(33.33% - 20px); /* Three cards in a row with gap between them */
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+  }
+
+  .blog-card:hover {
+      transform: translateY(-5px); /* Add a slight hover effect */
+  }
+
+  .blog-image {
+      width: 100%;
+      height: auto;
+  }
+
+  .blog-content {
+      padding: 15px;
+  }
+
+  .blog-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+  }
+
+  .read-more {
+      display: inline-block;
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+  }
+
+  /* Responsive Styles */
+  @media screen and (max-width: 768px) {
+      .blog-card {
+          width: calc(50% - 20px); /* Two cards in a row for smaller screens */
+      }
+  }
+
+  @media screen and (max-width: 576px) {
+      .blog-card {
+          width: 100%; /* Single card per row for extra small screens */
+      }
+  }
+</style>
+
+</body>
+</html>
+
+
