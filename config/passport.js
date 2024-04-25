@@ -64,7 +64,7 @@ passport.use(
 passport.use(new GoogleStrategy({
   clientID: "452052023088-0htoto7m595602kskg368clafq4212tg.apps.googleusercontent.com",
   clientSecret: "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",
-  callbackURL: "http://localhost:3000/auth/google/callback"
+  callbackURL: "https://kitrim.onrender.com/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
   console.log('Google OAuth callback triggered');
   console.log('Profile information:', profile);
